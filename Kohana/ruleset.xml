@@ -2,6 +2,9 @@
 <ruleset name="Kohana">
 	<description>The Kohana coding standard.</description>
 
+	<!-- Need to set tab width to use indent sniff -->
+	<arg name="tab-width" value="4"/>
+
 	<!-- Include some specific generic sniffs -->
 	<rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
 	<rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
@@ -9,9 +12,15 @@
 	<rule ref="Generic.Formatting.SpaceAfterCast" />
 	<rule ref="Generic.Formatting.MultipleStatementAlignment" />
 	<rule ref="Generic.Formatting.SpaceAfterNot" />
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="tabIndent" value="true" />
+		</properties>
+	</rule>
 	<rule ref="Squiz.WhiteSpace.ObjectOperatorSpacing">
 		<properties>
 			<property name="ignoreNewlines" value="true" />
 		</properties>
 	</rule>
+
 </ruleset>
