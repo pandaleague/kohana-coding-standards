@@ -66,9 +66,18 @@ class ComparisonOperatorSniff implements Sniff
 
         switch ($tokens[$stackPtr]['type']) {
             case 'T_BOOLEAN_AND':
+                $error = 'Operator && is not allowed, use AND instead';
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'ComparisonOperator');
+                if ($fix === true) {
+                    $phpcsFile->fixer->replaceToken(($stackPtr), 'AND');
+                }
+                break;
             case 'T_BOOLEAN_OR':
-                $error = 'Operators && and || are not allowed, use AND and OR instead';
-                $phpcsFile->addError($error, $stackPtr, 'ComparisonOperator');
+                $error = 'Operators || are not allowed, use OR instead';
+                $fix = $phpcsFile->addFixableError($error, $stackPtr, 'ComparisonOperator');
+                if ($fix === true) {
+                    $phpcsFile->fixer->replaceToken(($stackPtr), 'OR');
+                }
                 break;
 
             default:
