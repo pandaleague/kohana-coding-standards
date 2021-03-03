@@ -15,7 +15,7 @@ namespace Kohana\Sniffs\Functions;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Throws errors if ternary expressions use parentheses improperly or exceed 
+ * Throws errors if ternary expressions use parentheses improperly or exceed
  * 80 characters in length on a single line.
  *
  * @category  PHP
@@ -35,7 +35,7 @@ class RegularExpressionSniff implements Sniff
     public function register()
     {
         return array(
-            T_STRING 
+            T_STRING
         );
     }
 
@@ -44,7 +44,7 @@ class RegularExpressionSniff implements Sniff
      *
      * @param \PHP_CodeSniffer $phpcsFile All the tokens found in the
      *        document
-     * @param int $stackPtr Position of the current token in the stack passed 
+     * @param int $stackPtr Position of the current token in the stack passed
      *        in $tokens
      * @return void
      */
@@ -59,7 +59,7 @@ class RegularExpressionSniff implements Sniff
             && $tokens[$nextPtr]['type'] == 'T_OPEN_PARENTHESIS') {
 
             // Is this a POSIX function?
-            if (preg_match('/^(ereg|spliti?|sql_regcase)$/', $tokens[$stackPtr]['content'])) { 
+            if (preg_match('/^(ereg|spliti?|sql_regcase)$/', $tokens[$stackPtr]['content'])) {
                 $error = 'PCRE (preg) functions are preferred over POSIX (ereg) functions';
                 $phpcsFile->addError($error, $stackPtr);
 
@@ -67,17 +67,17 @@ class RegularExpressionSniff implements Sniff
             } elseif (strpos($tokens[$stackPtr]['content'], 'preg') === 0) {
 
                 // Is the regular expression surrounded by single quotes?
-                $nextPtr = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, $nextPtr + 1); 
+                $nextPtr = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, $nextPtr + 1);
                 $content = $tokens[$nextPtr]['content'];
                 if (substr($content, 0, 1) == '"') {
                     $error = 'Regular expressions must be surrounded by single quotes';
-                    $phpcsFile->addError($error, $stackPtr);
+                    $phpcsFile->addError($error, $stackPtr, 'RegEx');
                 }
 
                 // Does the regular expression have a EOL hole?
                 if (preg_match('/\$\/[^D]*$/', $content)) {
                     $error = 'Regular expression may have an EOL hole and need /D modifier';
-                    $phpcsFile->addWarning($error, $stackPtr);
+                    $phpcsFile->addWarning($error, $stackPtr, 'RegEx');
                 }
 
                 // Is this function preg_replace?
@@ -87,11 +87,11 @@ class RegularExpressionSniff implements Sniff
 
                 // Is the replacement surrounded by single quotes?
 				// In some cases this functionality is required, hence this is a warning
-                $nextPtr = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, $nextPtr + 1); 
+                $nextPtr = $phpcsFile->findNext(T_CONSTANT_ENCAPSED_STRING, $nextPtr + 1);
                 $content = $tokens[$nextPtr]['content'];
                 if (substr($content, 0, 1) == '"') {
                     $error = 'It is recommended that regular expression replacements are surrounded by single quotes';
-                    $phpcsFile->addWarning($error, $stackPtr);
+                    $phpcsFile->addWarning($error, $stackPtr, 'RegEx');
                 }
 
                 // Is the replacement using the $n notation for backreferences?

@@ -16,7 +16,7 @@ namespace Kohana\Sniffs\WhiteSpace;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
 /**
- * Throws errors if spaces are used improperly around constructs, 
+ * Throws errors if spaces are used improperly around constructs,
  * parentheses, and some operators.
  *
  * @category  PHP
@@ -55,7 +55,7 @@ class ParenthesesSniff implements Sniff
      *
      * @param \PHP_CodeSniffer\Files\File $phpcsFile All the tokens found in the
      *        document
-     * @param int $stackPtr Position of the current token in the stack passed 
+     * @param int $stackPtr Position of the current token in the stack passed
      *        in $tokens
      * @return void
      */
@@ -108,7 +108,7 @@ class ParenthesesSniff implements Sniff
 
             case 'T_CLOSE_PARENTHESIS':
                 $opener = $tokens[$stackPtr]['parenthesis_opener'] ?? $phpcsFile->findPrevious(T_OPEN_PARENTHESIS, $stackPtr - 1, null, true);;
-                $prevPtr = $phpcsFile->findPrevious(T_WHITESPACE, $opener - 1, null, true); 
+                $prevPtr = $phpcsFile->findPrevious(T_WHITESPACE, $opener - 1, null, true);
                 if (!in_array($tokens[$prevPtr]['type'], array('T_STRING', 'T_ARRAY'))
                     && $tokens[$stackPtr - 1]['type'] == 'T_WHITESPACE'
                     // we will allow a line ending here
@@ -124,7 +124,7 @@ class ParenthesesSniff implements Sniff
                 // Allow the =& operator 
                 $before = $tokens[$stackPtr - 1];
                 if($before['type'] === 'T_EQUAL' || $before['content'] === '=') {
-                    continue;
+                    break;
                 }
             case 'T_BOOLEAN_NOT':
                 $before = $tokens[$stackPtr - 1];
